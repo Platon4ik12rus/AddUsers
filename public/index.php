@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-$rootPath = dirname(__DIR__); 
+$rootPath = dirname(__DIR__);
 require_once $rootPath . '/config/database.php';
 require_once $rootPath . '/src/Database.php';
 require_once $rootPath . '/src/User.php';

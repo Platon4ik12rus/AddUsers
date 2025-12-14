@@ -11,28 +11,28 @@ class User
         $this->db = $db;
     }
 
-        private function validate(string $name, string $email): array
-{
-    $errors = [];
+    private function validate(string $name, string $email): array
+    {
+        $errors = [];
 
-    $name = trim($name);
-    if ($name === '') {
-        $errors[] = 'Имя не может быть пустым.';
-    } elseif (mb_strlen($name) > 100) {
-        $errors[] = 'Имя не может быть длиннее 100 символов.';
+        $name = trim($name);
+        if ($name === '') {
+            $errors[] = 'Имя не может быть пустым.';
+        } elseif (mb_strlen($name) > 100) {
+            $errors[] = 'Имя не может быть длиннее 100 символов.';
+        }
+
+        $email = trim($email);
+        if ($email === '') {
+            $errors[] = 'Email не может быть пустым.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Некорректный формат email.';
+        } elseif ($this->db->emailExists($email)) {
+            $errors[] = 'Пользователь с таким email уже существует.';
+        }
+
+        return $errors;
     }
-
-    $email = trim($email);
-    if ($email === '') {
-        $errors[] = 'Email не может быть пустым.';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Некорректный формат email.';
-    } elseif ($this->db->emailExists($email)) {
-        $errors[] = 'Пользователь с таким email уже существует.';
-    }
-
-    return $errors;
-}
 
 
     public function addFromConsole(): void
@@ -40,7 +40,7 @@ class User
         echo "Добавление нового пользователя ";
         echo str_repeat("=", 40) . " ";
 
-        $name  = $this->readLine("Введите имя: ");
+        $name = $this->readLine("Введите имя: ");
         $email = $this->readLine("Введите email: ");
 
         $errors = $this->validate($name, $email);
@@ -88,16 +88,16 @@ class User
     }
 
 
-private function readLine(string $prompt): string
-{
-    echo $prompt;
+    private function readLine(string $prompt): string
+    {
+        echo $prompt;
 
-    $input = readline();
+        $input = readline();
 
-    if ($input === false) {
-        return '';
+        if ($input === false) {
+            return '';
+        }
+
+        return trim($input);
     }
-
-    return trim($input);
-}
 }
